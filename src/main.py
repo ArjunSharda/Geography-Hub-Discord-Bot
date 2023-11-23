@@ -1,8 +1,3 @@
-# 11-23-2023 (MM/DD/YY)
-# Arjun Sharda
-# This file is under the MIT license.
-# ©️ Arjun Sharda 2023-present.
-
 from nextcord.ext import commands, application_checks
 import nextcord
 import json
@@ -35,6 +30,26 @@ async def on_ready():
 async def membercount(interaction: Interaction):
   embed = nextcord.Embed(title="Member Count", description=f"There are {len(interaction.guild.members)} members in this server!", color=nextcord.Color.green())
   await interaction.response.send_message(embed=embed)
+
+
+@client.slash_command(description="View the avatar of another member!")
+async def avatar(interaction: Interaction, user: nextcord.Member, server_avatar: Optional[bool], user_avatar: Optional[bool]):
+  if server_avatar is True:
+    S_Avatar = user.display_avatar
+    embed = nextcord.Embed(title=f"{user}'s server avatar", color=nextcord.Color.green(), timestamp=datetime.now())
+    embed.set_image(url=S_Avatar)
+    await interaction.send(embed=embed)
+
+  if user_avatar is True:
+    u_avatar = user.avatar.url
+    embed = nextcord.Embed(title=f"{user}'s user avatar", color=nextcord.Color.green(), timestamp=datetime.now())
+    embed.set_image(url=u_avatar)
+    await interaction.send(embed=embed)
+
+  if server_avatar or user_avatar is None:
+    embed = nextcord.Embed(title="An error occured", description="The user does not have a custom avatar.", color=nextcord.Color.red(), timestamp=datetime.now())
+    
+    
 
 @client.slash_command(description="Ask the magical 8ball a question!")
 async def eightball(interaction: Interaction, *, question: str):
